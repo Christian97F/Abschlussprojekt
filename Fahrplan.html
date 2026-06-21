@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projekt-Fahrplan · Schritt für Schritt durch die Gates</title>
+<style>
+  :root{
+    --ink:#16242f; --muted:#5c6b78; --bg:#f5f7f9; --card:#ffffff;
+    --line:#e4e9ee; --line2:#eef2f5;
+    --primary:#0f766e; --primary-d:#0b5a54; --primary-soft:#e6f4f1;
+    --gold:#b45309; --gold-soft:#fdf2e6;
+    --ok:#15803d; --ok-soft:#e7f4ec; --warn:#b45309; --warn-soft:#fbeede;
+    --red:#be123c;
+    --shadow:0 1px 2px rgba(20,40,55,.06), 0 6px 20px rgba(20,40,55,.05);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+    line-height:1.62; -webkit-font-smoothing:antialiased;}
+  a{color:var(--primary); text-decoration:none}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+  h1,h2,h3,h4{line-height:1.25; margin:0}
+
+  /* HERO */
+  .hero{background:radial-gradient(1200px 500px at 80% -10%, #14655c 0%, transparent 60%),
+               linear-gradient(135deg,#0c463f 0%,#0e3a52 100%);
+    color:#eaf3f1; padding:60px 0 52px; position:relative; overflow:hidden;}
+  .hero:after{content:""; position:absolute; inset:0;
+    background:linear-gradient(transparent 70%, rgba(0,0,0,.12)); pointer-events:none}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase; color:#8fd6c9;
+    background:rgba(143,214,201,.12); border:1px solid rgba(143,214,201,.25);
+    padding:6px 14px; border-radius:999px;}
+  .hero h1{font-size:clamp(30px,5vw,50px); font-weight:800; margin:20px 0 14px; letter-spacing:-.02em; color:#fff}
+  .hero .lead{font-size:clamp(16px,2.2vw,20px); max-width:740px; color:#cfe3df}
+  .stats{display:flex; flex-wrap:wrap; gap:14px; margin-top:30px}
+  .stat{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:12px; padding:14px 18px; min-width:118px}
+  .stat b{display:block; font-size:26px; font-weight:800; color:#fff}
+  .stat span{font-size:13px; color:#a9cbc4}
+  .byline{margin-top:26px; font-size:14px; color:#9fc3bc}
+
+  /* NAV */
+  nav.toc{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(10px); border-bottom:1px solid var(--line)}
+  nav.toc .wrap{display:flex; gap:6px; flex-wrap:wrap; padding:10px 24px}
+  nav.toc a{font-size:14px; font-weight:600; color:var(--muted); padding:8px 12px; border-radius:9px; white-space:nowrap}
+  nav.toc a:hover{background:var(--primary-soft); color:var(--primary-d)}
+  nav.toc a.active{background:var(--primary); color:#fff}
+
+  /* SECTION */
+  section{padding:54px 0; border-bottom:1px solid var(--line2)}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:8px}
+  .sec-num{font-size:14px; font-weight:800; color:var(--primary); background:var(--primary-soft);
+    border-radius:8px; padding:3px 10px; letter-spacing:.04em}
+  section h2{font-size:clamp(22px,3.2vw,30px); font-weight:800; letter-spacing:-.01em}
+  .sec-lead{color:var(--muted); max-width:840px; margin:6px 0 28px; font-size:16.5px}
+
+  /* PRINCIPLE CARDS */
+  .grid{display:grid; gap:18px}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .vcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+  .vcard .ic{width:42px; height:42px; border-radius:11px; display:grid; place-items:center;
+    background:var(--primary-soft); color:var(--primary-d); margin-bottom:14px}
+  .vcard h3{font-size:16.5px; margin-bottom:6px}
+  .vcard p{margin:0; color:var(--muted); font-size:14.5px}
+
+  /* PANELS */
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow)}
+  .panel + .panel{margin-top:18px}
+  .panel h3{font-size:18px; margin-bottom:14px}
+  .arc{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:6px 0 4px}
+  .arc .step{background:var(--primary-soft); color:var(--primary-d); font-weight:700;
+    border:1px solid #cfe7e2; border-radius:10px; padding:8px 14px; font-size:14px}
+  .arc .arrow{color:var(--primary); font-weight:700}
+  ol.clean,ul.clean{margin:8px 0 0; padding-left:20px}
+  ol.clean li,ul.clean li{margin:7px 0}
+  .hint{background:var(--gold-soft); border:1px solid #f0d9bd; border-left:4px solid var(--gold);
+    border-radius:10px; padding:12px 16px; color:#7a3d08; font-size:14.5px; margin-top:16px}
+
+  /* GATE OVERVIEW */
+  .timeline{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+  .tcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 20px 18px; box-shadow:var(--shadow); position:relative}
+  .tcard .glabel{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--primary)}
+  .tcard h3{font-size:17px; margin:6px 0 6px}
+  .tcard p{margin:0; color:var(--muted); font-size:13.5px}
+  .tcard .pin{position:absolute; top:-10px; right:16px; width:30px;height:30px; border-radius:50%;
+    background:var(--primary); color:#fff; display:grid; place-items:center; font-weight:800; font-size:14px;
+    box-shadow:0 2px 6px rgba(15,118,110,.4)}
+  .note{margin-top:18px; font-size:14.5px; color:var(--muted); background:var(--card);
+    border:1px solid var(--line); border-left:4px solid var(--primary); border-radius:10px; padding:12px 16px}
+
+  /* GATE STEP BLOCKS */
+  .gate-block{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); margin-bottom:22px; overflow:hidden}
+  .gate-head{display:flex; align-items:center; gap:16px; padding:20px 24px; border-bottom:1px solid var(--line2);
+    background:linear-gradient(180deg,#f3faf8,#fff)}
+  .gate-head .gnum{flex:0 0 auto; font-size:13px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+    color:#fff; background:var(--primary); border-radius:9px; padding:8px 14px}
+  .gate-head h3{font-size:20px}
+  .gate-head .goal{margin:3px 0 0; font-size:14px; color:var(--muted)}
+  .gate-intro{padding:16px 24px 0; font-size:14.5px; color:#41505c}
+  .gate-intro .loop{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-top:9px}
+  .gate-intro .loop span{background:var(--primary-soft); color:var(--primary-d); border:1px solid #cfe7e2;
+    border-radius:8px; padding:5px 11px; font-size:13px; font-weight:700}
+  .gate-intro .loop i{color:var(--primary); font-style:normal; font-weight:700}
+  ol.steps{list-style:none; counter-reset:s; margin:0; padding:8px 24px 12px}
+  ol.steps > li{counter-increment:s; position:relative; padding:15px 0 15px 46px; border-bottom:1px dashed var(--line)}
+  ol.steps > li:last-child{border-bottom:none}
+  ol.steps > li:before{content:counter(s); position:absolute; left:0; top:14px; width:30px; height:30px;
+    border-radius:50%; background:var(--primary-soft); color:var(--primary-d); font-weight:800; font-size:13.5px;
+    display:grid; place-items:center}
+  ol.steps > li > .d{color:#1f2d38; font-size:15px}
+  ol.steps > li > .d b{font-weight:700}
+  .cond{display:inline-block; font-size:11px; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
+    color:#1d4ed8; background:#eaf2fb; border-radius:6px; padding:2px 7px; margin-left:6px; vertical-align:1px}
+  ol.steps ul.sub{margin:9px 0 2px; padding-left:20px; list-style:disc}
+  ol.steps ul.sub li{padding:3px 0; color:#41505c; font-size:14px}
+  ol.steps ul.sub li::marker{color:var(--primary)}
+  ol.steps ul.sub li b{color:#243640}
+  .trap{display:block; margin-top:8px; font-size:13.5px; color:var(--red); font-weight:600}
+  .trap:before{content:"⚠ "; font-weight:700}
+  .ex{margin:11px 0 2px; background:#f3faf8; border:1px solid #d6ebe5; border-radius:10px; padding:13px 15px; font-size:13.5px; color:#234b44}
+  .ex b{color:var(--primary-d)} .ex .cap{display:block; font-size:12px; color:var(--muted); margin-top:7px}
+  .toolrow{padding:13px 24px; background:#f7faf9; border-top:1px solid var(--line2); font-size:13.5px; color:var(--muted)}
+  .toolrow b{color:var(--primary-d)}
+  code{background:#eef2f4; border:1px solid var(--line); border-radius:5px; padding:1px 6px;
+    font-family:"SF Mono",Consolas,Menlo,monospace; font-size:12.5px; color:#0b5a54}
+
+  /* TABLE */
+  .tbl{width:100%; border-collapse:separate; border-spacing:0; background:var(--card);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow); font-size:14.5px}
+  .tbl th{background:#f1f5f6; text-align:left; padding:13px 16px; font-size:13px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--line)}
+  .tbl td{padding:12px 16px; border-bottom:1px solid var(--line2)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl tr:hover td{background:#fafcfc}
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; padding:4px 10px; border-radius:999px}
+  .pill.done{background:var(--ok-soft); color:var(--ok)}
+  .pill.part{background:#eaf2fb; color:#1d4ed8}
+  .pill.open{background:var(--warn-soft); color:var(--warn)}
+
+  /* CHECKLIST */
+  .checks{columns:2; column-gap:26px}
+  .check{display:flex; gap:12px; align-items:flex-start; break-inside:avoid; margin:0 0 12px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px;
+    box-shadow:var(--shadow); font-size:14.5px}
+  .check .box{flex:0 0 auto; width:20px;height:20px;border-radius:6px;border:2px solid var(--primary);
+    margin-top:2px; position:relative}
+  .check .box:after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center;
+    color:var(--primary); font-weight:800; font-size:13px}
+
+  footer{padding:30px 0 60px; text-align:center; color:var(--muted); font-size:13px}
+  .toolbar{position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:10px; z-index:30}
+  .toolbar button{width:46px;height:46px;border-radius:50%; border:1px solid var(--line);
+    background:#fff; color:var(--primary-d); box-shadow:var(--shadow); cursor:pointer; font-size:17px}
+  .toolbar button:hover{background:var(--primary-soft)}
+
+  @media (max-width:880px){
+    .g4{grid-template-columns:repeat(2,1fr)} .timeline{grid-template-columns:1fr 1fr} .checks{columns:1}}
+  @media (max-width:560px){
+    .g4{grid-template-columns:1fr} .timeline{grid-template-columns:1fr}
+    .gate-head{flex-direction:column; align-items:flex-start; gap:8px} .toolbar{display:none}}
+  @media print{
+    nav.toc,.toolbar{display:none} body{background:#fff}
+    section{break-inside:avoid; padding:24px 0} .gate-block{break-inside:avoid} .hero{padding:30px 0}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">ET/DV-Abschlussprojekt · Allgemeine Arbeitsgrundlage</span>
+  <h1>Projekt-Fahrplan</h1>
+  <p class="lead">Eine allgemeine Schritt-für-Schritt-Anleitung für ein Abschlussprojekt vom Typ
+    Machbarkeitsstudie — unabhängig vom konkreten Thema. Zu Projektbeginn erkennst du die tatsächlichen
+    Aufgaben und wendest den passenden Baustein an.</p>
+  <div class="stats">
+    <div class="stat"><b>4</b><span>Gates</span></div>
+    <div class="stat"><b>8</b><span>technische Bausteine</span></div>
+    <div class="stat"><b>12</b><span>vorbereitete Hilfsmittel</span></div>
+    <div class="stat"><b>14</b><span>Prüfpunkte</span></div>
+  </div>
+  <p class="byline">Gegliedert nach Gates — nicht nach Tagen, da die Abgabezeitpunkte variieren können.</p>
+</div></header>
+
+<!-- NAV -->
+<nav class="toc"><div class="wrap">
+  <a href="#prinzipien">Grundprinzipien</a>
+  <a href="#start">Projektstart</a>
+  <a href="#gates">Gate-Überblick</a>
+  <a href="#schritte">Schritt für Schritt</a>
+  <a href="#hilfsmittel">Hilfsmittel</a>
+  <a href="#check">Prüfpunkte</a>
+</div></nav>
+
+<!-- PRINZIPIEN -->
+<section id="prinzipien"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>Worauf es ankommt</h2></div>
+  <p class="sec-lead">Vier Prinzipien, die in jedem Projekt dieses Typs gelten — unabhängig vom Thema.</p>
+  <div class="grid g4">
+    <div class="vcard">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+      <h3>Aufgaben erkennen, Baustein anwenden</h3>
+      <p>Egal welches Thema: Zu Beginn die konkreten Aufgaben herauslesen, dann den passenden vorbereiteten Baustein einsetzen.</p></div>
+    <div class="vcard">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+      <h3>Verdeckte Anforderungen zuerst</h3>
+      <p>Die versteckten Punkte erkennen und absichern — dort entscheiden sich die Bewertungen.</p></div>
+    <div class="vcard">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M4 6h16M4 18h16"/></svg></div>
+      <h3>Ein roter Faden</h3>
+      <p>Problem → Lösung → Machbarkeit → Wirtschaftlichkeit → Empfehlung, über alle Gates hinweg.</p></div>
+    <div class="vcard">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg></div>
+      <h3>Modular &amp; alles festhalten</h3>
+      <p>Lösungen modular und erweiterbar (wird bewertet); jede Entscheidung dokumentieren — die spätere Doku darf nichts Neues enthalten.</p></div>
+  </div>
+</div></section>
+
+<!-- PROJEKTSTART -->
+<section id="start"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Projektstart</h2></div>
+  <p class="sec-lead">Der wichtigste Schritt: aus dem konkreten Briefing die Aufgaben und die verdeckten Anforderungen herauslesen.</p>
+
+  <div class="panel">
+    <h3>Der rote Faden, der über alle Gates läuft</h3>
+    <div class="arc">
+      <span class="step">Problem (Qualität / Kosten)</span><span class="arrow">→</span>
+      <span class="step">Lösung (Technik)</span><span class="arrow">→</span>
+      <span class="step">Machbarkeits­nachweis</span><span class="arrow">→</span>
+      <span class="step">Wirtschaftlichkeit</span><span class="arrow">→</span>
+      <span class="step">Empfehlung</span>
+    </div>
+    <p style="color:var(--muted); margin:14px 0 0">Das Muster ist immer gleich: Ein Unternehmen will etwas ändern/investieren,
+      hat Qualitäts- und Kostendruck, und braucht eine Entscheidung — <em>technisch und wirtschaftlich machbar, und soll man es so tun?</em></p>
+  </div>
+
+  <div class="panel">
+    <h3>Erste Schritte zu Projektbeginn</h3>
+    <ol class="clean">
+      <li><strong>Briefing &amp; alle Anlagen vollständig lesen</strong> → zwei Listen anlegen: <em>explizite</em> und <em>verdeckte</em> Anforderungen.</li>
+      <li><strong>Konkrete Aufgaben identifizieren</strong> und den jeweils passenden Baustein aus Gate 2 zuordnen.</li>
+      <li><strong>Verdeckte Anforderungen jagen</strong> — sie stecken zuverlässig in:
+        <ul class="clean">
+          <li>rhetorischen Fragen des Auftraggebers („Ob sich das lohnt?", „Was, wenn das ausfällt?"),</li>
+          <li>Nebensätzen mit Konsequenz (ein Schritt entfällt oder kommt hinzu),</li>
+          <li>Normverweisen (z. B. ISO 9001 → Qualitätsregelkreis schließen),</li>
+          <li>Zukunftsandeutungen („später mehr…", „weitere…") → Skalierbarkeit mitdenken.</li>
+        </ul></li>
+      <li><strong>Anforderungen auf die Gates verteilen</strong> und eine <strong>Annahmen-Liste</strong> starten (wird in Gate 3 gefordert).</li>
+    </ol>
+    <div class="hint"><strong>Wichtigste Regel:</strong> Während der gesamten Bearbeitung <em>alles</em> festhalten
+      (Screenshots, Rechenwege, Entscheidungen, Annahmen). In der Dokumentationsphase darf kein neues Material
+      entstehen — nur noch ausformulieren.</div>
+  </div>
+</div></section>
+
+<!-- GATE-ÜBERBLICK -->
+<section id="gates"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Die vier Gates im Überblick</h2></div>
+  <p class="sec-lead">Reihenfolge und Aufbau der Gates sind in jedem Projekt gleich — nur die Inhalte wechseln.</p>
+  <div class="timeline">
+    <div class="tcard"><div class="pin">1</div><div class="glabel">Gate 1</div><h3>Projektsteckbrief</h3><p>Scope und Auftrag klären.</p></div>
+    <div class="tcard"><div class="pin">2</div><div class="glabel">Gate 2</div><h3>Technologische Machbarkeit</h3><p>Nachweisen, dass jede Teillösung technisch funktioniert.</p></div>
+    <div class="tcard"><div class="pin">3</div><div class="glabel">Gate 3</div><h3>Entscheidungsvorlage</h3><p>Planung, Kosten, Risiken, klare Empfehlung. Als PDF.</p></div>
+    <div class="tcard"><div class="pin">4</div><div class="glabel">Gate 4</div><h3>Präsentation</h3><p>Projektverlauf und Ergebnisse, 15–20 min.</p></div>
+  </div>
+  <div class="note"><strong>Der Zeitpunkt der Abgaben steht nicht fest:</strong> Es können auch zwei Gates an einem Tag
+    fällig sein oder an einem Tag keines. Deshalb ist dieser Fahrplan nach Gates gegliedert, nicht nach Tagen.</div>
+</div></section>
+
+<!-- SCHRITT FÜR SCHRITT -->
+<section id="schritte"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Schritt für Schritt durch die Gates</h2></div>
+  <p class="sec-lead">Allgemeine Schrittfolge je Gate. ⚠ markiert die typischen Stolperstellen. Bausteine mit dem Hinweis
+    <span class="cond">falls vorhanden</span> nur anwenden, wenn dein Projekt die Aufgabe enthält.</p>
+
+  <!-- GATE 1 -->
+  <div class="gate-block">
+    <div class="gate-head"><span class="gnum">Gate 1</span>
+      <div><h3>Projektsteckbrief</h3><p class="goal">Ziel: Scope, Ziele und Auftrag klar festlegen. Die Vorlage „Projektsteckbrief" ausfüllen.</p></div></div>
+    <ol class="steps">
+      <li><span class="d"><b>Projekttitel</b> festlegen — kurz und treffend.</span></li>
+      <li><span class="d"><b>Ausgangslage</b> beschreiben: Unternehmen, Marktumfeld, Anlass der Änderung/Investition, aktueller Prozess und die Stelle, an der eingegriffen wird.</span></li>
+      <li><span class="d"><b>Anforderungen</b> aus der Startliste vollständig übernehmen — explizit <em>und</em> verdeckt.</span></li>
+      <li><span class="d"><b>Projektziele</b> formulieren — was das Projekt liefern soll (Machbarkeit nachweisen, Wirtschaftlichkeit bestimmen, Qualität/Prozess verbessern).</span></li>
+      <li><span class="d"><b>ZKQ-Vorgaben</b> festlegen (Zeit / Kosten / Qualität) — jeweils <b>messbar</b> (eine Zahl, eine Frist, ein Schwellwert).</span>
+        <span class="trap">Vage Ziele kosten Punkte — jede ZKQ-Größe quantifizieren.</span></li>
+      <li><span class="d"><b>Abgrenzungen</b> setzen — was ausdrücklich <em>nicht</em> zum Projekt gehört (z. B. nur Machbarkeitsnachweis statt Serienreife).</span></li>
+      <li><span class="d"><b>Meilensteine / wichtige Termine</b> — die vier Gates.</span></li>
+      <li><span class="d"><b>Beteiligte</b> laut Vorlage eintragen: Auftraggeber, Projektleitung, Projektmitglieder, Lenkungsausschuss; Datum/Unterschrift.</span></li>
+    </ol>
+    <div class="toolrow"><b>Hilfsmittel:</b> vorausgefüllter Gate-1-Master · Anforderungs-Hilfe.</div>
+  </div>
+
+  <!-- GATE 2 -->
+  <div class="gate-block">
+    <div class="gate-head"><span class="gnum">Gate 2</span>
+      <div><h3>Technologische Machbarkeit</h3><p class="goal">Ziel: für jede technische Teilaufgabe belegen, dass sie funktioniert. Keine Vorlage → je Lösung selbst strukturieren.</p></div></div>
+    <div class="gate-intro">Für <b>jede</b> Teilaufgabe immer dieselbe Schleife durchlaufen — danach die zutreffenden Bausteine wählen:
+      <div class="loop"><span>Anforderung klären</span><i>→</i><span>Lösung entwerfen</span><i>→</i><span>Prototyp / Umsetzung</span><i>→</i><span>Testen</span><i>→</i><span>Machbarkeit dokumentieren</span></div>
+    </div>
+    <ol class="steps">
+      <li><span class="d"><b>System verstehen &amp; abbilden.</b> Gesamtablauf/-aufbau darstellen, die betroffene Stelle und alle Schnittstellen markieren (Flussdiagramm/PAP).</span></li>
+
+      <li><span class="d"><b>Steuerung / Automatisierung</b> <span class="cond">falls SPS / IEC 61131-3</span></span>
+        <ul class="sub">
+          <li>Vorgegebene I/O-Liste übernehmen; Sensoren als <b>Öffner/Schließer</b> kennzeichnen.</li>
+          <li>Ablauf als <b>Schrittkette</b> (Schritt/Transition) entwerfen und als Ablaufdiagramm dokumentieren.</li>
+          <li>Sicherheit zuerst: Not-Aus/Schutzeinrichtungen → definierter <b>sicherer Zustand</b>; danach Betriebsarten (EIN/AUS, Start/Stopp).</li>
+          <li>Varianten/Verzweigungen abbilden (unterschiedliche Werkstücke, Modi, Stückzahlen); umsetzen und simulieren.</li>
+        </ul>
+        <span class="trap">Öffner invertiert auswerten · alle geforderten Varianten/Verriegelungen · sicheren Zustand bei Stopp/Störung definieren.</span></li>
+
+      <li><span class="d"><b>Hardware auswählen &amp; Beschaffung vorbereiten</b> <span class="cond">falls gefordert</span></span>
+        <ul class="sub">
+          <li>Bedarf quantifizieren (z. B. Anzahl Ein-/Ausgänge, Leistung, Schnittstellen) — mit Reserve.</li>
+          <li>Geeignete Komponente auswählen und Beschaffung vorbereiten (Stückliste + Preise).</li>
+          <li>Kosten an die Gate-3-Kostenabschätzung übergeben.</li>
+        </ul>
+        <span class="trap">Reserven einplanen · keinen Bedarf (z. B. Schutz-/Statuskanäle) übersehen.</span></li>
+
+      <li><span class="d"><b>Regelung</b> <span class="cond">falls Regelstrecke</span></span>
+        <ul class="sub">
+          <li>Strecke aus der gegebenen Sprungantwort identifizieren (Kennwerte, z. B. Verzugszeit T<sub>u</sub> / Ausgleichszeit T<sub>g</sub>).</li>
+          <li>Reglertyp wählen (P/PI/PID) und Parameter nach Standardverfahren bestimmen (z. B. Ziegler-Nichols, Chien-Hrones-Reswick).</li>
+          <li>Regelkreis simulieren und gegen die Vorgabe prüfen (Sollwert, erlaubte Toleranz, geforderte Schnelligkeit).</li>
+        </ul>
+        <span class="trap">Erlaubte Toleranz für die Auslegung nutzen · Reglerwahl begründen · Kennwerte sauber ablesen.</span></li>
+
+      <li><span class="d"><b>Datenerfassung / Programmierung</b> <span class="cond">falls Programm / Schnittstelle</span></span>
+        <ul class="sub">
+          <li>Datenmodell festlegen (geforderte Felder + Datentypen), modular umsetzen (<code>struct</code> / getrennte Module).</li>
+          <li><b>Schnittstelle als Vertrag</b> definieren — Format, Reihenfolge, Trennzeichen, Encoding, Zahlen-/Datumsformat.</li>
+          <li>Funktion mit Testdaten prüfen.</li>
+        </ul>
+        <span class="trap">Schnittstelle eindeutig spezifizieren · Datentypen sauber · erweiterbar halten.</span></li>
+
+      <li><span class="d"><b>Datenbank</b> <span class="cond">falls Datenhaltung</span></span>
+        <ul class="sub">
+          <li>ER-Schema entwerfen, normalisieren, Schlüssel festlegen.</li>
+          <li>Anlegen, <b>Import testen</b>, Testdatensätze, Abfragen für die Auswertung.</li>
+          <li>Skalierbarkeit andiskutieren (mehr Felder, Aufteilung in mehrere Datenbanken).</li>
+        </ul>
+        <span class="trap">Import nicht nur behaupten, sondern testen · Skalierbarkeit erwähnen.</span></li>
+
+      <li><span class="d"><b>Auswertung / Visualisierung</b> <span class="cond">falls Anzeige / Statistik</span></span>
+        <ul class="sub">
+          <li><b>Exakt die geforderten Kennzahlen</b> (z. B. Mittelwert/Standardabweichung), den geforderten Schwellwert und die geforderte Stichprobengröße (z. B. die letzten N Datensätze) umsetzen.</li>
+          <li>Passende Diagramme; Schwelle und Stichprobengröße parametrierbar; ggf. Zeitverlauf und automatische Aktualisierung (Timer).</li>
+          <li>Umsetzung in Qt / C++ (Datenzugriff über QtSql oder die DB-C-API); pro Anzeige/Station wiederverwendbar.</li>
+        </ul>
+        <span class="trap">Exakte Spezifikation treffen (Kennzahl/Schwelle/Anzahl) · Zeitverlauf statt nur Momentaufnahme.</span></li>
+
+      <li><span class="d"><b>Qualität / Qualitätsmanagement</b> <span class="cond">falls Fehler-/Reklamationsdaten oder Normbezug</span></span>
+        <ul class="sub">
+          <li>Daten nach Ursache kategorisieren; <b>Pareto</b> (Häufigkeit) <em>und</em> Schweregrad bewerten → die schwerwiegendsten bestimmen.</li>
+          <li>Ursachen ermitteln (Ishikawa, 5-Why) und mit den technischen Lösungen <b>verknüpfen</b>; Kennzahlen wählen.</li>
+          <li>Bei Normbezug (z. B. ISO 9001) den Regelkreis schließen: Messen → Auswerten → Maßnahmen → Wirkung.</li>
+        </ul>
+        <span class="trap">Ursachen mit konkreten Lösungen verknüpfen · die schwerwiegendsten, nicht nur die häufigsten, bestimmen.</span></li>
+
+      <li><span class="d"><b>Modularität &amp; Nachhaltigkeit dokumentieren</b> — modularer, weiterentwickelbarer Aufbau und Ressourceneffizienz. Wird ausdrücklich bewertet.</span></li>
+    </ol>
+    <div class="toolrow"><b>Hilfsmittel:</b> Schrittketten-Gerüst (CODESYS) · Reglerentwurf-Skript · Datenimport-Gerüst (CSV→DB) · DB-architect (ER, PAP) · Qt-Visu-Gerüst · Pareto-/Ishikawa-Vorlage.</div>
+  </div>
+
+  <!-- GATE 3 -->
+  <div class="gate-block">
+    <div class="gate-head"><span class="gnum">Gate 3</span>
+      <div><h3>Entscheidungsvorlage</h3><p class="goal">Ziel: projektmäßige Machbarkeit zeigen und eine Empfehlung aussprechen. <b>Als PDF abzugeben.</b></p></div></div>
+    <ol class="steps">
+      <li><span class="d"><b>Stammdaten:</b> Projektbezeichnung, Ausgangslage, Projektziele, Abgrenzungen, projektbearbeitende Personen.</span></li>
+      <li><span class="d"><b>Inhaltliche Umsetzung:</b> Was wird wie (Maschinen, Methoden, Verfahren) gemacht — die technologischen Meilensteine aus dem PSP.</span></li>
+      <li><span class="d"><b>Projektplanung</b> ausarbeiten:</span>
+        <ul class="sub">
+          <li>Projektstrukturplan (Teilprojekte → Arbeitspakete).</li>
+          <li>Gantt-/Zeitplanung, Meilensteine, Ressourcen.</li>
+          <li>Notizen zu getroffenen Annahmen.</li>
+        </ul></li>
+      <li><span class="d"><b>Kostenabschätzung je Sammelvorgang:</b> Personal gemäß Gantt + Anlagen/Maschinen + Material + Gemeinkosten.</span></li>
+      <li><span class="d"><b>Wirtschaftlichkeit</b> — Varianten vergleichen und Amortisation/Break-even bestimmen.</span>
+        <div class="ex">
+          <b>Allgemeines Rechenschema (Werte aus dem konkreten Briefing einsetzen):</b>
+          <ul class="clean" style="margin-top:6px">
+            <li>Investition = Summe einmaliger Kosten (Anschaffung + Inbetriebnahme + Software …); dazu laufende Kosten/Jahr.</li>
+            <li>Stückkosten je Variante = Material + (Bearbeitungszeit × Lohnsatz) + anteilige Anlagen-/Wartungskosten.</li>
+            <li>Einsparung pro Stück = Differenz der Varianten — <b>indirekte Effekte</b> (entfallende/zusätzliche Schritte) einrechnen.</li>
+            <li>Break-even-Menge = Investition / Einsparung pro Stück → gegen reale Kapazität/Bedarf einordnen.</li>
+          </ul>
+          <span class="cap">Die Methode bleibt immer gleich — nur die Zahlen kommen aus dem jeweiligen Briefing. Dafür der parametrierte Rechner.</span>
+        </div>
+        <span class="trap">Indirekte Effekte einrechnen · Ergebnis einordnen (lohnt es sich bei der realen Stückzahl?), nicht nur die Zahl nennen.</span></li>
+      <li><span class="d"><b>Projektrisiken:</b> identifizieren, bewerten (Eintritt × Auswirkung, mit Begründung), Gegenmaßnahmen.</span>
+        <span class="trap">Ausfall einer kritischen Einzelressource (Single Point of Failure) mit Gegenmaßnahme behandeln — danach fragt der Auftraggeber gern indirekt.</span></li>
+      <li><span class="d"><b>Projektchancen:</b> Nutzen der Umsetzung (Kosten, Qualität, eigene Kontrolle, Skalierbarkeit, Nachhaltigkeit).</span></li>
+      <li><span class="d"><b>Empfehlung</b> an den Lenkungsausschuss — eine klare, begründete Aussage (Ja/Nein + Bedingungen); Datum/Unterschrift; als PDF exportieren.</span>
+        <span class="trap">„Sowohl-als-auch" ohne klare Empfehlung kostet Punkte.</span></li>
+    </ol>
+    <div class="toolrow"><b>Hilfsmittel:</b> Gate-3-Master · DB-architect (PSP) · Risikomatrix · Wirtschaftlichkeits-/Break-even-Rechner.</div>
+  </div>
+
+  <!-- GATE 4 -->
+  <div class="gate-block">
+    <div class="gate-head"><span class="gnum">Gate 4</span>
+      <div><h3>Präsentation</h3><p class="goal">Ziel: Projektverlauf und Ergebnisse überzeugend zeigen (15–20 min).</p></div></div>
+    <ol class="steps">
+      <li><span class="d"><b>Foliendramaturgie</b> aufbauen: Ausgangslage/Problem → Ziele &amp; ZKQ → Vorgehen → technologische Machbarkeit (je Teillösung) → Wirtschaftlichkeit → Risiken &amp; Chancen → Empfehlung.</span></li>
+      <li><span class="d"><b>Live-Demo</b> vorbereiten — die zentralen Ergebnisse vorführbar machen (z. B. Simulation und die Auswertungs-Anzeige).</span></li>
+      <li><span class="d"><b>Roter Faden prüfen</b> — Problem ↔ Lösung ↔ Daten ↔ Wirtschaftlichkeit sichtbar machen.</span></li>
+      <li><span class="d"><b>Proben &amp; Timing</b> — Sprecherübergänge, Zeitrahmen 15–20 min, mögliche Fragen antizipieren.</span></li>
+    </ol>
+    <div class="toolrow"><b>Hilfsmittel:</b> Präsentations-Template.</div>
+  </div>
+</div></section>
+
+<!-- HILFSMITTEL -->
+<section id="hilfsmittel"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Vorbereitete Hilfsmittel</h2></div>
+  <p class="sec-lead">Mitgebrachte Vorlagen und Code sind erlaubt — und themenunabhängig wiederverwendbar. Vieles ist fertig,
+    der Rest ist als anpassbares Gerüst angelegt.</p>
+  <table class="tbl">
+    <thead><tr><th>Baustein</th><th>Unterstützt</th><th style="width:130px">Status</th></tr></thead>
+    <tbody>
+      <tr><td>Anforderungs-Hilfe (erkennt verdeckte Anforderungen)</td><td>Projektstart</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>Gate-1- &amp; Gate-3-Master (vorausgefüllt)</td><td>Gate 1, Gate 3</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>PSP / Gantt / Risikomatrix / Kostentabelle</td><td>Gate 3</td><td><span class="pill part">teils ✔</span></td></tr>
+      <tr><td>Wirtschaftlichkeits- / Break-even-Rechner</td><td>Gate 3</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>Pareto- / Ishikawa-Vorlage</td><td>Gate 2 (Qualität)</td><td><span class="pill part">teils ✔</span></td></tr>
+      <tr><td>Schrittketten-Gerüst (CODESYS, generisch)</td><td>Gate 2 (Steuerung)</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>Reglerentwurf-Skript (Sprungantwort → PID)</td><td>Gate 2 (Regelung)</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>Datenimport-Gerüst (CSV → Datenbank)</td><td>Gate 2 (Daten)</td><td><span class="pill done">fertig ✔</span></td></tr>
+      <tr><td>DB-Schema / ERM + Import (DB-architect)</td><td>Gate 2 (DB)</td><td><span class="pill done">fertig ✔</span></td></tr>
+      <tr><td>PAP / Flussdiagramm / UML (DB-architect)</td><td>Gate 2, Doku</td><td><span class="pill done">fertig ✔</span></td></tr>
+      <tr><td>Qt-/C++-Visu-Gerüst (QtSql oder DB-C-API, Qt Charts)</td><td>Gate 2 (Auswertung)</td><td><span class="pill open">geplant</span></td></tr>
+      <tr><td>Präsentations-Template</td><td>Gate 4</td><td><span class="pill open">geplant</span></td></tr>
+    </tbody>
+  </table>
+  <div class="hint" style="margin-top:18px"><strong>DB-architect</strong> (eigenes Tool) liefert ER-Diagramme, PSP, PAP, UML und Mindmaps
+    direkt als PNG/PDF — themenunabhängig für die ganze Diagramm-Seite eines Projekts.</div>
+</div></section>
+
+<!-- CHECK -->
+<section id="check" style="border-bottom:none"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Prüfpunkte: die verdeckten Anforderungen</h2></div>
+  <p class="sec-lead">Diese Liste vor jeder Abgabe durchgehen. Genau hier gehen Punkte verloren — oder werden gesichert.</p>
+  <div class="checks">
+    <div class="check"><span class="box"></span><span>Jede rhetorische Auftraggeber-Frage beantwortet?</span></div>
+    <div class="check"><span class="box"></span><span>Indirekte Kosteneffekte berücksichtigt (entfallende/zusätzliche Schritte)?</span></div>
+    <div class="check"><span class="box"></span><span>Break-even / Amortisation gegen reale Kapazität bzw. Bedarf eingeordnet?</span></div>
+    <div class="check"><span class="box"></span><span>Single-Point-of-Failure-Risiko mit Gegenmaßnahme behandelt?</span></div>
+    <div class="check"><span class="box"></span><span>Benötigte Hardware bestimmt &amp; Beschaffung vorbereitet (Bedarf gezählt)?</span></div>
+    <div class="check"><span class="box"></span><span>Sensorlogik (Öffner/Schließer) bzw. Sonderfälle korrekt behandelt?</span></div>
+    <div class="check"><span class="box"></span><span>Alle geforderten Varianten / Verzweigungen abgebildet?</span></div>
+    <div class="check"><span class="box"></span><span>Schnittstellen (Datei/Format) als Vertrag definiert?</span></div>
+    <div class="check"><span class="box"></span><span>Exakte geforderte Kennzahlen / Schwellen / Stichprobengröße getroffen?</span></div>
+    <div class="check"><span class="box"></span><span>Skalierbarkeit / Erweiterbarkeit erwähnt?</span></div>
+    <div class="check"><span class="box"></span><span>Roter Faden Problem ↔ Lösung ↔ Daten ↔ Wirtschaftlichkeit sichtbar?</span></div>
+    <div class="check"><span class="box"></span><span>ZKQ-Ziele messbar formuliert?</span></div>
+    <div class="check"><span class="box"></span><span>Modularität / Nachhaltigkeit adressiert &amp; Annahmen-Liste gepflegt?</span></div>
+    <div class="check"><span class="box"></span><span>Alles für die Dokumentationsphase festgehalten?</span></div>
+  </div>
+</div></section>
+
+<footer>Projekt-Fahrplan · Allgemeine Arbeitsgrundlage für ET/DV-Abschlussprojekte</footer>
+
+<div class="toolbar">
+  <button onclick="window.print()" title="Als PDF drucken">⎙</button>
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Nach oben">↑</button>
+</div>
+
+<script>
+  const links=[...document.querySelectorAll('nav.toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const obs=new IntersectionObserver((es)=>{es.forEach(e=>{ if(e.isIntersecting){
+    links.forEach(l=>l.classList.remove('active'));
+    const a=map.get(e.target.id); if(a)a.classList.add('active');}});},{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

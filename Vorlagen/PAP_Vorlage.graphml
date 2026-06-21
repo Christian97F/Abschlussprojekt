@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/graphml"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:y="http://www.yworks.com/xml/graphml"
+         xmlns:yed="http://www.yworks.com/xml/yed/3"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/graphml http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <key for="node" id="d6" yfiles.type="nodegraphics"/>
+  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
+  <graph id="G" edgedefault="directed">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- LEGENDE                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <node id="leg_header">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="20" y="10" width="360" height="40"/>
+          <y:Fill color="#1A2540" transparent="false"/>
+          <y:BorderStyle color="#00C8E0" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="14"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Legende – PAP nach DIN 66001</y:NodeLabel>
+          <y:Shape type="roundrectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Start / Ende (Terminator) -->
+    <node id="leg_s">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="40" y="64" width="320" height="44"/>
+          <y:Fill color="#27AE60" transparent="false"/>
+          <y:BorderStyle color="#145A32" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Start / Ende  (Terminator)</y:NodeLabel>
+          <y:Shape type="ellipse"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Verarbeitung -->
+    <node id="leg_p">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="40" y="122" width="320" height="44"/>
+          <y:Fill color="#1E3A5F" transparent="false"/>
+          <y:BorderStyle color="#0D1F3C" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Verarbeitung / Berechnung</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Entscheidung -->
+    <node id="leg_d">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="40" y="180" width="320" height="70"/>
+          <y:Fill color="#F5A623" transparent="false"/>
+          <y:BorderStyle color="#C67B00" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#1A2540" visible="true">Entscheidung / Verzweigung&#xa;(Ja / Nein)</y:NodeLabel>
+          <y:Shape type="diamond"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Ein-/Ausgabe -->
+    <node id="leg_i">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="40" y="264" width="320" height="44"/>
+          <y:Fill color="#00838F" transparent="false"/>
+          <y:BorderStyle color="#005662" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Ein- / Ausgabe  (Lesen / Schreiben)</y:NodeLabel>
+          <y:Shape type="parallelogram"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Unterprogramm -->
+    <node id="leg_u">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="40" y="322" width="320" height="44"/>
+          <y:Fill color="#6A1B9A" transparent="false"/>
+          <y:BorderStyle color="#38006B" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Unterprogramm / Modulaufruf</y:NodeLabel>
+          <y:Shape type="process"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Verbindungspunkt (kleiner Kreis) -->
+    <node id="leg_c">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="175" y="390" width="50" height="50"/>
+          <y:Fill color="#424242" transparent="false"/>
+          <y:BorderStyle color="#212121" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="13"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">1</y:NodeLabel>
+          <y:Shape type="ellipse"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Verbindungspunkt Beschriftung -->
+    <node id="leg_c_txt">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="234" y="393" width="140" height="44"/>
+          <y:Fill transparent="true"/>
+          <y:BorderStyle type="none"/>
+          <y:NodeLabel alignment="left" fontFamily="Calibri" fontSize="11"
+                       fontStyle="bold" textColor="#1A2540" visible="true">Verbindungspunkt&#xa;(Seitenübergang)</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TRENNLINIE                                                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <node id="separator">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="422" y="5" width="3" height="830"/>
+          <y:Fill color="#1A2540" transparent="false"/>
+          <y:BorderStyle type="none"/>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- BEISPIEL-PAP                                                 -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- Kopfzeile PAP -->
+    <node id="pap_header">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="450" y="10" width="430" height="40"/>
+          <y:Fill color="#1A2540" transparent="false"/>
+          <y:BorderStyle color="#00C8E0" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="14"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Beispiel-Programmablaufplan (PAP)</y:NodeLabel>
+          <y:Shape type="roundrectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Metadaten-Box -->
+    <node id="pap_meta">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="450" y="58" width="430" height="44"/>
+          <y:Fill color="#EBF3FB" transparent="false"/>
+          <y:BorderStyle color="#1E3A5F" raised="false" type="line" width="1.5"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="11"
+                       fontStyle="plain" textColor="#1A2540" visible="true">Programm: [Name eintragen]   |   Datum: [TT.MM.JJJJ]   |   Version: [1.0]   |   Autor: [Name]</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- START -->
+    <node id="pap_start">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="120" width="190" height="44"/>
+          <y:Fill color="#27AE60" transparent="false"/>
+          <y:BorderStyle color="#145A32" raised="false" type="line" width="2.5"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="14"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">START</y:NodeLabel>
+          <y:Shape type="ellipse"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Eingabe einlesen (Ein-/Ausgabe) -->
+    <node id="pap_in">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="206" width="190" height="50"/>
+          <y:Fill color="#00838F" transparent="false"/>
+          <y:BorderStyle color="#005662" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Eingabe einlesen&#xa;[Variable x einlesen]</y:NodeLabel>
+          <y:Shape type="parallelogram"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Verarbeitung / Berechnung -->
+    <node id="pap_proc">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="302" width="190" height="50"/>
+          <y:Fill color="#1E3A5F" transparent="false"/>
+          <y:BorderStyle color="#0D1F3C" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Verarbeitung&#xa;[Berechnung durchführen]</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Unterprogrammaufruf -->
+    <node id="pap_sub">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="398" width="190" height="50"/>
+          <y:Fill color="#6A1B9A" transparent="false"/>
+          <y:BorderStyle color="#38006B" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Unterprogramm aufrufen&#xa;[Funktion()]</y:NodeLabel>
+          <y:Shape type="process"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Entscheidung (Raute) -->
+    <node id="pap_dec">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="494" width="190" height="76"/>
+          <y:Fill color="#F5A623" transparent="false"/>
+          <y:BorderStyle color="#C67B00" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#1A2540" visible="true">Bedingung erfüllt?&#xa;[z.B. x &gt; 0]</y:NodeLabel>
+          <y:Shape type="diamond"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Ja-Zweig (unterhalb der Raute) -->
+    <node id="pap_ja">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="626" width="190" height="50"/>
+          <y:Fill color="#1E3A5F" transparent="false"/>
+          <y:BorderStyle color="#0D1F3C" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Aktion A ausführen&#xa;[Ja-Zweig]</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Nein-Zweig (rechts von der Raute) -->
+    <node id="pap_nein">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="840" y="500" width="190" height="64"/>
+          <y:Fill color="#1E3A5F" transparent="false"/>
+          <y:BorderStyle color="#0D1F3C" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Aktion B ausführen&#xa;[Nein-Zweig]</y:NodeLabel>
+          <y:Shape type="rectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- Ergebnis ausgeben (Ein-/Ausgabe) -->
+    <node id="pap_out">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="730" width="190" height="50"/>
+          <y:Fill color="#00838F" transparent="false"/>
+          <y:BorderStyle color="#005662" raised="false" type="line" width="2.0"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">Ergebnis ausgeben&#xa;[Ausgabe]</y:NodeLabel>
+          <y:Shape type="parallelogram"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- ENDE -->
+    <node id="pap_end">
+      <data key="d6">
+        <y:ShapeNode>
+          <y:Geometry x="575" y="832" width="190" height="44"/>
+          <y:Fill color="#C0392B" transparent="false"/>
+          <y:BorderStyle color="#7B241C" raised="false" type="line" width="2.5"/>
+          <y:NodeLabel alignment="center" fontFamily="Calibri" fontSize="14"
+                       fontStyle="bold" textColor="#FFFFFF" visible="true">ENDE</y:NodeLabel>
+          <y:Shape type="ellipse"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- KANTEN (Flussrichtung)                                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- START → Eingabe -->
+    <edge id="e1" source="pap_start" target="pap_in">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Eingabe → Verarbeitung -->
+    <edge id="e2" source="pap_in" target="pap_proc">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Verarbeitung → Unterprogramm -->
+    <edge id="e3" source="pap_proc" target="pap_sub">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Unterprogramm → Entscheidung -->
+    <edge id="e4" source="pap_sub" target="pap_dec">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Entscheidung → Ja-Zweig (unten) -->
+    <edge id="e5" source="pap_dec" target="pap_ja">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#27AE60" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#27AE60" visible="true">Ja</y:EdgeLabel>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Entscheidung → Nein-Zweig (rechts) -->
+    <edge id="e6" source="pap_dec" target="pap_nein">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#C0392B" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" fontFamily="Calibri" fontSize="12"
+                       fontStyle="bold" textColor="#C0392B" visible="true">Nein</y:EdgeLabel>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Ja-Zweig → Ausgabe -->
+    <edge id="e7" source="pap_ja" target="pap_out">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Nein-Zweig → Ausgabe (gebogen: erst nach unten, dann nach links) -->
+    <edge id="e8" source="pap_nein" target="pap_out">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path>
+            <y:Point x="935" y="755"/>
+          </y:Path>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+    <!-- Ausgabe → ENDE -->
+    <edge id="e9" source="pap_out" target="pap_end">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:LineStyle color="#1A2540" type="line" width="2.0"/>
+          <y:Arrows source="none" target="standard"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+
+  </graph>
+</graphml>
