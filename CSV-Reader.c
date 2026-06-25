@@ -8,6 +8,13 @@
 #define trennzeichen     ';'     //Trennzeichen als Zeichen (für Vergleich in getfile)
 #define trennzeichen_str ";"     //Trennzeichen als String (für strtok in readcsv)
 
+#define HOST "localhost"
+#define PORT 3306
+#define USER "root"
+#define PASSWORD "p123456"
+#define DB "produktion"
+
+
 //-----------------------------------------------------------------------------
 //---struct mit den CSV Dimensionen + FILE pointer-----------------------------
 //-----------------------------------------------------------------------------
@@ -42,10 +49,14 @@ static inline int idx(int i, int j, int k, int cols, int cell_size){
 //---Funktions-Prototypen------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void getfile(CsvInfo *csv);
-void readcsv(CsvInfo *csv, char *array);
-void printarray(CsvInfo *csv, char *array);
-void pushtoDB(CsvInfo *csv, char *array);
+void get_file(CsvInfo *csv);
+void read_csv(CsvInfo *csv, char *array);
+void print_array(CsvInfo *csv, char *array);
+
+MYSQL *connect_to_db(void);
+int run_query(MYSQL *conn, const char *query);
+void insert_row(MYSQL *conn, CsvInfo *csv, char *array, int line);
+void push_to_db(CsvInfo *csv, char *array);
 
 
 
@@ -92,7 +103,7 @@ int main(void){
 //---CSV auswählen, öffnen und Dimensionen bestimmen, diese in struct ablegen--
 //-----------------------------------------------------------------------------
 
-void getfile(CsvInfo *csv){
+void get_file(CsvInfo *csv){
 	
 	int c;							//ASCII für einen char
 	int current_len = 0;			//aktuelle Zeilenlänge
@@ -185,7 +196,7 @@ void getfile(CsvInfo *csv){
 //---CSV-Datei in Array speichern----------------------------------------------
 //-----------------------------------------------------------------------------
 
-void readcsv(CsvInfo *csv, char *array){
+void read_csv(CsvInfo *csv, char *array){
 	
 	int line_counter = 0;		//Zähler für Zeilen
 	int col_counter = 0;		//Zähler für Spalten
@@ -228,10 +239,10 @@ void readcsv(CsvInfo *csv, char *array){
 
 
 //-----------------------------------------------------------------------------
-//---print-Funktion------------------------------------------------------------
+//---print-Funktion zum Testen-------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void printarray(CsvInfo *csv, char *array){
+void print_array(CsvInfo *csv, char *array){
 	
 	for(int i = 0; i < csv->lines; i++){
 		
@@ -248,37 +259,65 @@ void printarray(CsvInfo *csv, char *array){
 }
 
 
+
+//-----------------------------------------------------------------------------
+//---Verbindung zur Datenbank herstellen---------------------------------------
+//-----------------------------------------------------------------------------
+
+
+MYSQL *connect_to_db(void){
+
+	MYSQL *connection = mysql_init(NULL);
+	
+	if(!connection){
+		
+		fprintf(stderr, "SQL Initialisierung fehlgeschlagen\n");
+		return NULL;
+	}
+	
+	if(mysql_real_connect(connection, HOST, USER, PASSWORD, DB, PORT, NULL, 0) == NULL){
+
+		fprintf(stderr, "Verbindung mit der Datenabank fehlgeschlagen: %s\n", mysql_error(connection));
+		mysql_close(connection);
+		return NULL;
+			
+    }
+	
+	printf("\nVerbindung zur Datenbank hergestellt\n");
+	
+	return connection;
+	
+}
+
+
+
+//-----------------------------------------------------------------------------
+//---Funktion zum Senden einer Query-------------------------------------------
+//-----------------------------------------------------------------------------
+
+
+int run_query(MYSQL *conn, const char *query){
+	
+	
+	
+}
+
+
 //-----------------------------------------------------------------------------
 //---Funktion zum Übertragen in die Datenbank----------------------------------
 //-----------------------------------------------------------------------------
 
 
-void pushtoDB(CsvInfo *csv, char *array){
+void push_to_db(CsvInfo *csv, char *array){
 	
-	MYSQL *connection = mysql_init(NULL);
+	MYSQL *connection = connect_to_db();
 	char query[1000];
 	
 	if(!connection){
 		
-		fprintf(stderr, "SQL Initialisierung fehlgeschlagen");
 		return;
 	}
 	
-	if (mysql_real_connect(connection,
-            "localhost",  // Host
-            "root",       // User
-            "p123456",   // Passwort
-            "produktion",    // Datenbankname
-            3306, NULL, 0) == NULL) {
-				
-			fprintf(stderr, "Verbindung mit der Datenabank fehlgeschlagen: %s\n", mysql_error(connection));
-			mysql_close(connection);
-			return;
-			
-    }
-	
-	printf("\nVerbindung zur Datenbank hergestellt\n");
-
 	
 	for(int lines = 0; lines < csv->lines; lines++){
 		
@@ -289,9 +328,7 @@ void pushtoDB(CsvInfo *csv, char *array){
 				"INSERT INTO `produktion`.`fahrrad` (`serien_NR`) VALUES (%s)",
 				&array[idx(lines, 0, 0, csv->cols, csv->cell_size)]);
 
-			printf("Query [%d]: %s\n", lines, query);
-
-			if (mysql_query(connection, query)) {
+			if(mysql_query(connection, query)){
 
 				fprintf(stderr, "Query fehlgeschlagen: %s\n", mysql_error(connection));
 				mysql_close(connection);
@@ -307,7 +344,7 @@ void pushtoDB(CsvInfo *csv, char *array){
 				&array[idx(lines, 6, 0, csv->cols, csv->cell_size)],
 				&array[idx(lines, 7, 0, csv->cols, csv->cell_size)]);
 
-			if (mysql_query(connection, query)) {
+			if(mysql_query(connection, query)){
 
 				fprintf(stderr, "Query fehlgeschlagen: %s\n", mysql_error(connection));
 				mysql_close(connection);
@@ -324,7 +361,7 @@ void pushtoDB(CsvInfo *csv, char *array){
 				&array[idx(lines, 3, 0, csv->cols, csv->cell_size)],
 				&array[idx(lines, 5, 0, csv->cols, csv->cell_size)]);
 			
-			if (mysql_query(connection, query)) {
+			if(mysql_query(connection, query)){
 				
 				fprintf(stderr, "Query fehlgeschlagen: %s\n", mysql_error(connection));
 				mysql_close(connection);
